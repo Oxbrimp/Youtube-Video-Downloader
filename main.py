@@ -10,6 +10,7 @@ import json as simplejson
 import pytubefix
 from pytubefix import YouTube 
 from pytubefix.cli import on_progress
+import subprocess
 
 from tkinter import *
 import tkinter as tk 
@@ -64,12 +65,32 @@ def Download(video_link):
     yt = YouTube(url, on_progress_callback=on_progress)
 
     print(yt.title)
+
+    # Step 1: download audio (usually .webm or .m4a)
     ys = yt.streams.filter(only_audio=True).first()
+    temp_file = ys.download(output_path=os.getcwd())  # real downloaded file
 
-    out_file = os.path.join(os.getcwd(), f"{yt.title}.mp3")
-    ys.download(output_path=os.getcwd(), filename=f"{yt.title}.mp3")
+    # Step 2: convert to proper MP3
+    output_file = os.path.join(os.getcwd(), f"{yt.title}.mp3")
 
-    messagebox.showinfo("Success", f"Video downloaded in directory {out_file}")
+    cmd = [
+        "ffmpeg",
+        "-i", temp_file,
+        "-vn",
+        "-ar", "44100",        # car-friendly sample rate
+        "-ab", "192k",         # constant bitrate
+        "-ac", "2",            # stereo
+        "-metadata", f"title={yt.title}",
+        "-metadata", f"artist={yt.author}",
+        output_file
+    ]
+
+    subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    # Step 3: remove the original downloaded file
+    os.remove(temp_file)
+
+    messagebox.showinfo("Success", f"Video downloaded in directory {output_file}")
 
 
 
