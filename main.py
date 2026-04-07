@@ -1,5 +1,7 @@
 # Note to self : .\env\Script\activate to enable the virtual environment
 
+# Note to Self : creating executable - ( install pyinstaller ) &  pyinstaller --onefile main.py
+
 import os 
 import re 
 
