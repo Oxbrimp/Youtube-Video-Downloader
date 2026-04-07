@@ -7,6 +7,7 @@ import sys
 print(sys.executable)
 
 import json as simplejson
+import pytubefix
 from pytubefix import YouTube 
 from pytubefix.cli import on_progress
 
@@ -94,6 +95,8 @@ text = tk.StringVar()
 text.set("")
 textBox = tk.Entry(root, textvariable=text)
 textBox.pack(padx=15,pady=40)
+
+
 
 def on_button_click():
     #messagebox.showinfo("Downloading", "Please wait for a download to occur")
