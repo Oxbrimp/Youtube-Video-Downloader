@@ -1,6 +1,8 @@
 # Note to self : .\env\Script\activate to enable the virtual environment
 
 # Note to Self : creating executable - ( install pyinstaller ) &  pyinstaller --onefile main.py
+# NTS : Execution : .\env\Scripts\python.exe .\main.py
+
 
 import os 
 import re 
@@ -119,7 +121,7 @@ def Download(video_link, video_bool):
 ## GUI  SECTION   ##
 
 root = tk.Tk()
-root.title("Youtube Video Downloader V0.2")
+root.title("Youtube Video Downloader V0.3")
 root.geometry("400x331")
 root.resizable(False, False)
 
