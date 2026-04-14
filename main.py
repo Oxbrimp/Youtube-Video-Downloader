@@ -16,6 +16,8 @@ from tkinter import *
 import tkinter as tk 
 from tkinter import messagebox
 
+import threading 
+
 
 ##  DOWNLOADING LOGIC  ##
 
@@ -106,8 +108,8 @@ def Download(video_link, video_bool):
         #subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         # Removing of original file - replace with new (metadata filled) variant 
-        if os.path.exists(temp_file):
-            os.remove(temp_file)
+        if os.path.exists(fixed_input):
+            os.remove(fixed_input)
 
         messagebox.showinfo("Success", f"Video downloaded in directory {output_file}")
 
@@ -160,7 +162,10 @@ textBox.place(x=200,y=110,anchor=CENTER)
 def on_button_click():
     #messagebox.showinfo("Downloading", "Please wait for a download to occur")
     print(f"{textBox.get()} Selected") # Gets the code entered 
-    Download(textBox.get(), agreement.get())
+    #Download(textBox.get(), agreement.get())
+    link = textBox.get()
+    fmt = agreement.get()
+    threading.Thread(target=Download, args=(link, fmt), daemon=True).start() 
 
 button = tk.Button(
     root, text="Download", command=on_button_click, bg="lightblue", fg="black"
