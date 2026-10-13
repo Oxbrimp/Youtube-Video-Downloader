@@ -20,6 +20,12 @@ from tkinter import messagebox
 
 import threading 
 
+import traceback
+
+## Const 
+version_number = "0.4V"
+
+
 
 ##  DOWNLOADING LOGIC  ##
 
@@ -45,12 +51,16 @@ def Download(video_link, video_bool):
 
         print(yt.title)
 
+
+
         if video_bool == "mp4":
             ys = yt.streams.get_highest_resolution()
         else:
             ys = yt.streams.filter(only_audio=True).first()
         
-
+        if ys is None:
+            raise RuntimeError("No Stream Found for Video - Please raise GitHub Bug Alert :]")
+        
         temp_file = ys.download(output_path=os.getcwd())
 
         # MP3 - MP4 conv.
@@ -91,7 +101,7 @@ def Download(video_link, video_bool):
                 "copy", 
                 "-c:a", 
                 "copy",
-                "-map_metadata", "1"
+                "-map_metadata", "0"
             ]
 
 
@@ -115,15 +125,32 @@ def Download(video_link, video_bool):
 
         messagebox.showinfo("Success", f"Video downloaded in directory {output_file}")
 
+    
+
     except Exception as e:
+        traceback.print_exc()
         messagebox.showerror("Error, please quote this to the GitHub Repository", str(e))
 
 ## GUI  SECTION   ##
 
 root = tk.Tk()
-root.title("Youtube Video Downloader V0.3")
+root.title(f"Youtube Video Downloader {version_number}")
 root.geometry("400x331")
 root.resizable(False, False)
+
+top_stripe = tk.Frame(root, bg="#0B1F4D", height=8)
+top_stripe.pack(fill="x", side="top")
+
+top_stripe.pack_propagate(False)
+
+header = tk.Label(
+    root,
+    text=f"YT Downloader {version_number}",
+    fg="#0B1F4D",
+    font=("Segoe UI", 12, "bold")
+)
+header.pack(pady=(15,10))
+
 
 #frame = ttk.Frame(root, padding=10)
 #frame.grid()
